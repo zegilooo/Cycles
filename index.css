@@ -1,0 +1,68 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+html, body, #map {
+    height: 100%;
+}
+.nodisplay {display:none;}
+.panneau {
+    width: 30px;
+}    
+.c-vert, .c-rouge  {
+    font-size:10px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    border-radius: 3px;
+    opacity : 0.8;
+    /*box-shadow: 8px 8px 12px #aaa;*/
+} 
+.reload  {
+    cursor: hand;
+    cursor: pointer;
+    text-align:center;
+    font-size:20px;
+}
+.c-vert, .c-rouge, .center  {
+    text-align:center;    
+}
+.c-vert{
+    background-color: lightgreen;        
+}
+.c-rouge {
+    background-color: lightcoral;        
+}
+.leaflet-popup-tip, .leaflet-popup-content-wrapper, #info_div {
+    opacity : 0.8;
+    /*box-shadow: 8px 8px 12px #aaa;*/
+    background-color: black;
+}
+.leaflet-popup-content-wrapper, .leaflet-container a.leaflet-popup-close-button, #info_div {
+    /*text-shadow: 1px 1px 0px grey;*/
+    color: #fff;
+}
+#info_icon {
+    cursor: hand;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+	right: 5px;
+	z-index: 1000;
+}
+#info_div {
+    padding: 20px;
+	float: left;
+	font-size: 1.2em;
+	position: fixed;
+	top: 5%; left: 5%;
+	z-index: 1001;
+}
+#mapLocate {
+    cursor: hand;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+	left: 5px;
+	z-index: 1002;
+ }

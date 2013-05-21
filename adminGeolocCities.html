@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html ng-app>
+    <head>
+        <meta charset="UTF-8">
+        <title>test</title>
+    </head>
+    <body ng-controller="ContractsController">
+        <button ng-click="readContracts()">readContracts</button>
+        {{contracts | json}}
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyBpDOZ0cul3rGwaSa1_XBaRrRLXqGP8pTY&sensor=false"></script>
+        <script> 
+function ContractsController($scope, $http){
+    var jswait = function (millisec){
+        var date = new Date();
+        var tampon = null;
+        do { tampon = new Date(); } 
+        while(tampon-date < millisec);
+    }; 
+    $scope.readContracts = function(){
+            var geocoder = new google.maps.Geocoder();
+            $http({method: 'GET', url: 'http://cycles.lizazil.com/database/api/1/databases/mytest/collections/contracts'}).
+            success(function(data, status, headers, config) {
+                 $scope.contracts = angular.fromJson(data);
+                 $scope.contracts.forEach(function(contract) {
+                            var geo;
+                            contract.ref = [];
+                            contract.cities.forEach(function(c) {
+                                    $http({method: 'GET', url: 'http://cycles.lizazil.com/geo/json?address='+c+'&sensor=false'}).
+                                    success(function(data, status, headers, config) {
+                                    geo = angular.fromJson(data);
+                                    var geodata = {};
+                                    geodata.long_name = geo.results[0].address_components[0].long_name;
+                                    geodata.short_name = geo.results[0].address_components[0].short_name;
+                                    geodata.geometry = {};
+                                    geodata.geometry.bounds = geo.results[0].geometry.bounds;
+                                    geodata.geometry.location = geo.results[0].geometry.location;
+                                    
+                                    contract.ref.push(geodata);
+                                    jswait(1500);
+                                    }).
+                                    error(function(data, status, headers, config) {
+                                    //debugger;
+                                    });
+                            //jswait(1000);        
+                            delete contract.cities;
+                            delete contract._id;
+                        });
+                 });
+            }).
+            error(function(data, status, headers, config) {
+            debugger;
+            });
+    };
+ };    
+ </script>
+    </body>
+</html>
