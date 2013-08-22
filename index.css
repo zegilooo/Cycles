@@ -5,7 +5,19 @@ body {
 html, body, #map {
     height: 100%;
 }
+table { 
+    width: 100%;
+}
+td
+{
+height:20px;
+vertical-align:middle;
+padding:1px;
+}
 .nodisplay {display:none;}
+.right {text-align:right;}
+.center {text-align:center;}
+.justify {text-align : justify}
 .panneau {
     width: 30px;
 }    
@@ -16,7 +28,6 @@ html, body, #map {
     border-color: black;
     border-radius: 3px;
     opacity : 0.8;
-    /*box-shadow: 8px 8px 12px #aaa;*/
 } 
 .reload  {
     cursor: hand;
@@ -33,36 +44,47 @@ html, body, #map {
 .c-rouge {
     background-color: lightcoral;        
 }
-.leaflet-popup-tip, .leaflet-popup-content-wrapper, #info_div {
-    opacity : 0.8;
-    /*box-shadow: 8px 8px 12px #aaa;*/
+.leaflet-popup-tip, .leaflet-popup-content-wrapper {
+    opacity : 0.7;
     background-color: black;
 }
-.leaflet-popup-content-wrapper, .leaflet-container a.leaflet-popup-close-button, #info_div {
-    /*text-shadow: 1px 1px 0px grey;*/
+.leaflet-popup-content-wrapper, .leaflet-container a.leaflet-popup-close-button {
     color: #fff;
 }
-#info_icon {
+.leaflet-popup-content-wrapper {
+    width: 200px;
+}
+#mapInfo, #mapInfo2 {
     cursor: hand;
     cursor: pointer;
-    position: absolute;
-    top: 5px;
-	right: 5px;
-	z-index: 1000;
 }
-#info_div {
-    padding: 20px;
-	float: left;
-	font-size: 1.2em;
-	position: fixed;
-	top: 5%; left: 5%;
-	z-index: 1001;
+#mapInfo {
+    position: absolute;
+    bottom: 8px;
+	right: 8px;
+	z-index: 1000;
 }
 #mapLocate {
     cursor: hand;
     cursor: pointer;
     position: absolute;
-    top: 5px;
+    bottom: 5px;
 	left: 5px;
 	z-index: 1002;
- }
+}
+#mapAttribution {
+position: absolute;
+margin: 15px;
+padding:10px;
+top: 5px;
+left: 8px;
+color: DimGray;
+background-color: white;
+border-radius: 6px;
+border-style: solid;
+border-width: 1px;
+border-color: LightGrey;
+box-shadow: 1px 1px 0px Gray;
+z-index: 1010;
+}
+
