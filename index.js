@@ -1,5 +1,6 @@
 window.onload = function() {
 var G_MarkerArray = []; 
+var G_Map = {};
 var createXHR = function(){var e;if(window.ActiveXObject){try{e=new ActiveXObject("Microsoft.XMLHTTP")}catch(t){alert(t.message);e=null}}else{e=new XMLHttpRequest}return e};
 var feedBack = function (c, db){
     if(db == 1){
@@ -105,12 +106,12 @@ var callJCDecaux = function (station, replace) {
 var createMarker = function (station, replace) {
    if(replace)
    {  
- spliceMarkerByLocation({lat:station.position.lat,lng:station.position.lng});
+  spliceMarkerByLocation({lat:station.position.lat,lng:station.position.lng});
    }
    else
    { 
     if(G_MarkerArray.length>9){
-  map.removeLayer(G_MarkerArray[0]);
+  G_Map.removeLayer(G_MarkerArray[0]);
   G_MarkerArray.shift();
     } 
    }
@@ -146,16 +147,16 @@ var createMarker = function (station, replace) {
     G_MarkerArray.push(nMarker);
     var i = G_MarkerArray.length - 1;
     if(replace) {
-   map.addLayer(G_MarkerArray[i]); 
+   G_Map.addLayer(G_MarkerArray[i]); 
    G_MarkerArray[i].openPopup();
  } else {
-   map.addLayer(G_MarkerArray[i]); 
+   G_Map.addLayer(G_MarkerArray[i]); 
  }      
 };
 var spliceMarkerByLocation = function(location){ // l = {lat:position.lat,lng:position.lng}
     for (var i = 0; i < G_MarkerArray.length; i++) {
             if((G_MarkerArray[i].getLatLng().lat == location.lat)&&(G_MarkerArray[i].getLatLng().lng == location.lng)){
-             map.removeLayer(G_MarkerArray[i]);    
+             G_Map.removeLayer(G_MarkerArray[i]);    
              G_MarkerArray.splice(i,1);
   }
  }  
@@ -179,63 +180,101 @@ var getUriParamValue = function (param,url) {
 	if(matches) {return matches[2] !== undefined ? decodeURIComponent(matches[2]).replace(/\+/g,' ') : '';} else {return null;};
 };
 
-var startingLocation = [];
-if (getUriParamValue('latlng')) {startingLocation = JSON.parse('['+getUriParamValue('latlng')+']');}
-else if (localStorage.getItem('lastClicLatLng')) {startingLocation = JSON.parse(localStorage.getItem('lastClicLatLng'));}
-else {startingLocation = [48.853343,2.348831];}
-
-var map = L.map('map', {
- center: startingLocation,
- zoom: 15,
- zoomControl : false,
- attributionControl : false
-});
-//var tileLayer = L.tileLayer('http://{s}.tiles.mapbox.com/v3/zegilooo.i6doo96f/{z}/{x}/{y}.png', {
-//var tileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-var tileLayer = L.tileLayer('http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png', {
-
-    attribution: 'refs in mapAttribution div',
-    maxZoom: 30
-}).addTo(map);
-var onLocationFound = function (e) {
-    var radius = e.accuracy / 2;
- if (radius < 300) var circle = L.circle(e.latlng, radius, {
-                weight: 1,
-                color: 'blue',
-                fillColor: 'blue',
-                fillOpacity: 0.1
-            }).addTo(map);
-    callAllStations(e.latlng, 1);
-    localStorage.setItem('lastClicLatLng',JSON.stringify(latlngObjectToArray(e.latlng)));
-};
-var onLocationError = function (e) {
-    alert(e.message);
-};
-var onMapClick = function (e) {
+var runTheMap = function (startingLocation){
+    G_Map = L.map('map', {
+     center: startingLocation,
+     zoom: getUriParamValue('zoom') || 16,
+     zoomControl : false,
+     attributionControl : false
+    });
+    //var tileLayer = L.tileLayer('http://{s}.tiles.mapbox.com/v3/zegilooo.i6doo96f/{z}/{x}/{y}.png', {
+    //var tileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    var tileLayer = L.tileLayer('http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png', {
+    
+        attribution: 'refs in mapAttribution div',
+        maxZoom: 30
+    }).addTo(G_Map);
+    var onLocationFound = function (e) {
+        var radius = e.accuracy / 2;
+     if (radius < 300) var circle = L.circle(e.latlng, radius, {
+                    weight: 1,
+                    color: 'blue',
+                    fillColor: 'blue',
+                    fillOpacity: 0.1
+                }).addTo(G_Map);
         callAllStations(e.latlng, 1);
         localStorage.setItem('lastClicLatLng',JSON.stringify(latlngObjectToArray(e.latlng)));
-		var getParameters = "?latlng="+latlngObjectToArray(e.latlng)+"&city="+G_MarkerArray[0].options.contract+"&name="+G_MarkerArray[0].options.commercial_name;
-		//history.pushState(null, null, document.location.origin + document.location.pathname + getParameters);
-		history.pushState(null, null, getParameters);
-};
-var mapLocateClic = function () {  
-    map.locate({setView: true, maxZoom: 15, watch: false, enableHighAccuracy: true, maximumAge: 15000, timeout: 3000000});    
-};
-var mapInfoClic = function () {  
-    var attribution = document.getElementById("mapAttribution");
-    var reg = /nodisplay/i;
-    if(attribution.className.match(reg)){
-    attribution.className = attribution.className.replace(reg,'');
-    } else {
-    attribution.className =  'nodisplay';
+    };
+    var onLocationError = function (e) {
+        alert(e.message);
+    };
+    var onMapClick = function (e) {
+            callAllStations(e.latlng, 1);
+            localStorage.setItem('lastClicLatLng',JSON.stringify(latlngObjectToArray(e.latlng)));
+    		var getParameters = "?latlng="+latlngObjectToArray(e.latlng)+"&city="+G_MarkerArray[5].options.contract+"&name="+G_MarkerArray[5].options.commercial_name;
+    		//history.pushState(null, null, document.location.origin + document.location.pathname + getParameters);
+    		history.pushState(null, null, getParameters);
+    };
+    var mapLocateClic = function () {  
+        G_Map.locate({setView: true, maxZoom: 15, watch: false, enableHighAccuracy: true, maximumAge: 15000, timeout: 3000000});    
+    };
+    var mapInfoClic = function () {  
+        var attribution = document.getElementById("mapAttribution");
+        var reg = /nodisplay/i;
+        if(attribution.className.match(reg)){
+        attribution.className = attribution.className.replace(reg,'');
+        } else {
+        attribution.className =  'nodisplay';
+        }
+    };
+    G_Map.on('locationfound', onLocationFound);
+    G_Map.on('locationerror', onLocationError);
+    G_Map.on('click', onMapClick);
+    document.getElementById('mapLocate').onclick = mapLocateClic;
+    document.getElementById('mapInfo').onclick = mapInfoClic;
+    document.getElementById('mapInfo2').onclick = mapInfoClic;
+    document.getElementById('waiting').className = 'nodisplay';
+    callAllStations(latlngArrayToObject(startingLocation), 1);
+    
+};//runTheMap function
+    
+    /// startingLocation ///
+if (getUriParamValue('adress')) {
+     var G_handlerKiller = true;
+     var GoogUrl ='http://maps.googleapis.com/maps/api/geocode/json?address='+encodeURI(getUriParamValue('adress'))+'&sensor=false';
+     var GoogXhr = createXHR();
+        try {
+         GoogXhr.open('GET', GoogUrl, true);
+        }
+        catch (err) {
+            alert(err.message);
+            throw "ImpossibleAjaxRequest";
+        } 
+     GoogXhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+     GoogXhr.send();
+     GoogXhr.onreadystatechange = function()
+      {
+       if (GoogXhr.readyState === 4){
+            if(GoogXhr.status==200){
+                if (G_handlerKiller){        
+                    G_handlerKiller = false;
+                    runTheMap(latlngObjectToArray(JSON.parse(GoogXhr.responseText).results[0].geometry.location));
+                    }
+                }
+                else
+                { 
+                console.log('GoogXhr.status='+GoogXhr.status);
+                }
+       }
+      };    
     }
-};
-map.on('locationfound', onLocationFound);
-map.on('locationerror', onLocationError);
-map.on('click', onMapClick);
-document.getElementById('mapLocate').onclick = mapLocateClic;
-document.getElementById('mapInfo').onclick = mapInfoClic;
-document.getElementById('mapInfo2').onclick = mapInfoClic;
-document.getElementById('waiting').className = 'nodisplay';
-callAllStations(latlngArrayToObject(startingLocation), 1);
+else if (getUriParamValue('latlng')) {
+        runTheMap(JSON.parse('['+getUriParamValue('latlng')+']'));
+    }
+else if (localStorage.getItem('lastClicLatLng')) {
+        runTheMap(JSON.parse(localStorage.getItem('lastClicLatLng')));
+    }
+else {
+        runTheMap([48.853343,2.348831]);
+    }    
 } //window.onload https://github.com/n-b/Bicyclette/blob/master/Cities.md
