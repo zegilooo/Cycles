@@ -2,14 +2,14 @@ window.onload = function() {
 var G_MarkerArray = []; 
 var G_Map = {};
 var createXHR = function(){var e;if(window.ActiveXObject){try{e=new ActiveXObject("Microsoft.XMLHTTP")}catch(t){alert(t.message);e=null}}else{e=new XMLHttpRequest}return e};
-var feedBack = function (c, db){
+var feedBack = function (c, db){/*
     if(db == 1){
     var myUrl ='http://cycles.lizazil.com/feedback/feedBack?q={geoindex:{$near:['+c.lng+','+c.lat+']}}';
     }
     /*else{
     var myUrl ='http://cycles.lizazil.com/feedback2/feedBack/documents?q={geoindex:{$near:['+c.lng+','+c.lat+']}}';
     console.log('database2 in use');
-    }*/
+    }*//*
     var myXhr = createXHR();
     try {
         myXhr.open('PUT', myUrl, true);
@@ -31,12 +31,14 @@ var feedBack = function (c, db){
                 }
       }
      };
+     */
     };
 var callAllStations = function (c, db){
  var handlerKiller = true;
  feedBack(c, 1);
     if(db == 1) {
-	var myUrl ='http://cycles.lizazil.com/database/allStations?q={coordinates:{$near:['+c.lng+','+c.lat+']}}&l=10';
+//	var myUrl ='http://cycles.lizazil.com/database/allStations?q={coordinates:{$near:['+c.lng+','+c.lat+']}}&l=10';
+	var myUrl ='http://cycles.lizazil.com/cycles/near?q='+c.lat+','+c.lng+'&l=10';
     }
     else {
     var myUrl ='http://cycles.lizazil.com/database2/allStations/documents?q={coordinates:{$near:['+c.lng+','+c.lat+']}}&limit=10';
@@ -73,7 +75,7 @@ var callAllStations = function (c, db){
     };
 var callJCDecaux = function (station, replace) {
  var G_handlerKiller = true;
- var jcUrl ='http://cycles.lizazil.com/jcdecaux/stations/'+station.number+'?contract='+station.contract;
+ var jcUrl ='https://api.jcdecaux.com/vls/v1/stations/'+station.number+'?contract='+station.contract_name+'&apiKey=d4399f4695ceeb0f3c4dc9abcd5ec2540dd5c84f';
  var jcXhr = createXHR();
     try {
      jcXhr.open('GET', jcUrl, true);
@@ -91,7 +93,7 @@ var callJCDecaux = function (station, replace) {
             if (G_handlerKiller){        
                 G_handlerKiller = false;
                 var jcDecauxStation = JSON.parse(jcXhr.responseText);
-                if (!jcDecauxStation.contract) jcDecauxStation.contract = station.contract;
+                if (!jcDecauxStation.contract_name) jcDecauxStation.contract_name = station.contract_name;
                 if (!jcDecauxStation.commercial_name) jcDecauxStation.commercial_name = station.commercial_name;
                     createMarker(jcDecauxStation, replace);
                 }
@@ -135,7 +137,7 @@ var createMarker = function (station, replace) {
  var oMarker = {
   clickable:true,
   commercial_name: station.commercial_name,
-  contract: station.contract,
+  contract: station.contract_name,
   title:station.name,
         icon: L.divIcon({
    className: 'panneau',
@@ -211,7 +213,7 @@ var runTheMap = function (startingLocation){
     var onMapClick = function (e) {
             callAllStations(e.latlng, 1);
             localStorage.setItem('lastClicLatLng',JSON.stringify(latlngObjectToArray(e.latlng)));
-    		var getParameters = "?latlng="+latlngObjectToArray(e.latlng)+"&city="+G_MarkerArray[5].options.contract+"&name="+G_MarkerArray[5].options.commercial_name;
+    		var getParameters = "?latlng="+latlngObjectToArray(e.latlng)+"&city="+G_MarkerArray[5].options.contract;//+"&name="+G_MarkerArray[5].options.commercial_name;
     		//history.pushState(null, null, document.location.origin + document.location.pathname + getParameters);
     		history.pushState(null, null, getParameters);
     };
