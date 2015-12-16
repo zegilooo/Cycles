@@ -73,7 +73,6 @@ var callAllStations = function (c, db){
     };
 var callJCDecaux = function (station, replace) {
  var G_handlerKiller = true;
-// var jcUrl ='https://api.jcdecaux.com/vls/v1/stations/'+station.number+'?contract='+station.contract_name+'&apiKey=d4399f4695ceeb0f3c4dc9abcd5ec2540dd5c84f';
  var jcUrl ='http://cycles.lizazil.com/jcdecaux/stations/'+station.number+'?contract='+station.contract_name;
  var jcXhr = createXHR();
     try {
