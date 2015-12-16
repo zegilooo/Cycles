@@ -16,7 +16,6 @@ var feedBack = function (c, db){/*
     }
     catch (err) {
         alert(err.message);
-        throw "ImpossibleAjaxRequest";
     } 
  myXhr.setRequestHeader('Content-type', 'application/json');
  myXhr.send(JSON.stringify( { $inc: { count: 1 } }));
@@ -50,7 +49,6 @@ var callAllStations = function (c, db){
     }
     catch (err) {
         alert(err.message);
-        throw "ImpossibleAjaxRequest";
     } 
  myXhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
  myXhr.send();
@@ -68,21 +66,21 @@ var callAllStations = function (c, db){
             }
             else
             {
-            if(db == 1) callAllStations(c, 2); // try database2
+                if(db == 1) callAllStations(c, 2); // try database2
             }
       }
      };
     };
 var callJCDecaux = function (station, replace) {
  var G_handlerKiller = true;
- var jcUrl ='https://api.jcdecaux.com/vls/v1/stations/'+station.number+'?contract='+station.contract_name+'&apiKey=d4399f4695ceeb0f3c4dc9abcd5ec2540dd5c84f';
+// var jcUrl ='https://api.jcdecaux.com/vls/v1/stations/'+station.number+'?contract='+station.contract_name+'&apiKey=d4399f4695ceeb0f3c4dc9abcd5ec2540dd5c84f';
+ var jcUrl ='http://cycles.lizazil.com/jcdecaux/stations/'+station.number+'?contract='+station.contract_name;
  var jcXhr = createXHR();
     try {
      jcXhr.open('GET', jcUrl, true);
     }
     catch (err) {
         alert(err.message);
-        throw "ImpossibleAjaxRequest";
     } 
  jcXhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
  jcXhr.send();
@@ -250,7 +248,6 @@ if (getUriParamValue('adress')) {
         }
         catch (err) {
             alert(err.message);
-            throw "ImpossibleAjaxRequest";
         } 
      GoogXhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
      GoogXhr.send();
