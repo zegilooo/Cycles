@@ -37,10 +37,10 @@ var callAllStations = function (c, db){
  feedBack(c, 1);
     if(db == 1) {
 //	var myUrl ='http://cycles.lizazil.com/database/allStations?q={coordinates:{$near:['+c.lng+','+c.lat+']}}&l=10';
-	var myUrl ='http://cycles.lizazil.com/cycles/near?q='+c.lat+','+c.lng+'&l=10';
+	var myUrl ='https://cycles.lizazil.com/cycles/near?q='+c.lat+','+c.lng+'&l=10';
     }
     else {
-    var myUrl ='http://cycles.lizazil.com/database2/allStations/documents?q={coordinates:{$near:['+c.lng+','+c.lat+']}}&limit=10';
+    var myUrl ='https://cycles.lizazil.com/database2/allStations/documents?q={coordinates:{$near:['+c.lng+','+c.lat+']}}&limit=10';
     console.log('database2 in use');
     }
     var myXhr = createXHR();
@@ -73,7 +73,7 @@ var callAllStations = function (c, db){
     };
 var callJCDecaux = function (station, replace) {
  var G_handlerKiller = true;
- var jcUrl ='http://cycles.lizazil.com/jcdecaux/stations/'+station.number+'?contract='+station.contract_name;
+ var jcUrl ='https://cycles.lizazil.com/jcdecaux/stations/'+station.number+'?contract='+station.contract_name;
  var jcXhr = createXHR();
     try {
      jcXhr.open('GET', jcUrl, true);
@@ -188,7 +188,7 @@ var runTheMap = function (startingLocation){
     });
     //var tileLayer = L.tileLayer('http://{s}.tiles.mapbox.com/v3/zegilooo.i6doo96f/{z}/{x}/{y}.png', {
     //var tileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    var tileLayer = L.tileLayer('http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png', {
+    var tileLayer = L.tileLayer('https://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=b5b104397b7040afa5a241dc95d3d17c', {
     
         attribution: 'refs in mapAttribution div',
         maxZoom: 30
@@ -240,7 +240,7 @@ var runTheMap = function (startingLocation){
     /// startingLocation ///
 if (getUriParamValue('adress')) {
      var G_handlerKiller = true;
-     var GoogUrl ='http://maps.googleapis.com/maps/api/geocode/json?address='+encodeURI(getUriParamValue('adress'))+'&sensor=false';
+     var GoogUrl ='https://maps.googleapis.com/maps/api/geocode/json?address='+encodeURI(getUriParamValue('adress'))+'&sensor=false';
      var GoogXhr = createXHR();
         try {
          GoogXhr.open('GET', GoogUrl, true);
