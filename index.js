@@ -238,9 +238,9 @@ var runTheMap = function (startingLocation){
 };//runTheMap function
     
     /// startingLocation ///
-if (getUriParamValue('adress')) {
+if (getUriParamValue('address')) {
      var G_handlerKiller = true;
-     var GoogUrl ='https://maps.googleapis.com/maps/api/geocode/json?address='+encodeURI(getUriParamValue('adress'))+'&sensor=false';
+     var GoogUrl ='https://maps.googleapis.com/maps/api/geocode/json?address='+encodeURI(getUriParamValue('address'))+'&sensor=false';
      var GoogXhr = createXHR();
         try {
          GoogXhr.open('GET', GoogUrl, true);
